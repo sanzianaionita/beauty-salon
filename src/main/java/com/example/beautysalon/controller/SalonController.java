@@ -30,6 +30,7 @@ public class SalonController {
 
     @GetMapping("/by-name")
     public List<SalonDTO> getSalonsBySalonName(@RequestParam String salonName) {
+        System.out.println("test");
         return salonService.getSalonsBySalonName(salonName);
     }
 
