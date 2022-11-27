@@ -13,4 +13,5 @@ public interface SalonRepository extends JpaRepository<Salon, UUID> {
     List<Salon> findAllByLocationId(UUID locationId);
 
     List<Salon> findAllBySalonName(String salonName);
+
 }
