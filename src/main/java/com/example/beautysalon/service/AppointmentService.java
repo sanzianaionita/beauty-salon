@@ -53,7 +53,6 @@ public class AppointmentService {
                 .findFirst();
 
         if (first.isPresent()) {
-
             return editAppointment(appointmentMapper.appointmentToAppointmentDto(first.get()));
 
         } else {

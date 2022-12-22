@@ -18,13 +18,13 @@ public class SwaggerConfiguration {
   public static final String AUTHORIZATION_HEADER = "Authorization";
 
   private ApiInfo apiInfo() {
-    return new ApiInfo("My REST API",
-        "Some custom description of API.",
+    return new ApiInfo("Beauty Salon REST API",
+        "Beauty salon rest api description.",
         "1.0",
-        "Terms of service",
-        new Contact("Sallo Szrajbman", "www.baeldung.com", "salloszraj@gmail.com"),
-        "License of API",
-        "API license URL",
+        "",
+        new Contact("Sanziana Ionita", "", "sbituleanu@yahoo.com"),
+        "",
+        "",
         Collections.emptyList());
   }
 
@@ -35,7 +35,7 @@ public class SwaggerConfiguration {
         .securityContexts(Collections.singletonList(securityContext()))
         .securitySchemes(List.of(apiKey()))
         .select()
-        .apis(RequestHandlerSelectors.any())
+        .apis(RequestHandlerSelectors.basePackage("com.example.beautysalon"))
         .paths(PathSelectors.any())
         .build();
   }

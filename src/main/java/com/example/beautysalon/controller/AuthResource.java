@@ -6,11 +6,18 @@ import com.example.beautysalon.dto.LoggedApplicationUserDTO;
 import com.example.beautysalon.dto.LoginModel;
 import com.example.beautysalon.dto.RegisterModelDTO;
 import com.example.beautysalon.service.BeautyUserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/auth")
+@ApiIgnore
+@Hidden
 public class AuthResource {
 
     private final BeautyUserService userService;
