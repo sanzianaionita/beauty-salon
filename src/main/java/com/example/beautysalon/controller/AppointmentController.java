@@ -1,7 +1,6 @@
 package com.example.beautysalon.controller;
 
 import com.example.beautysalon.dto.AppointmentDTO;
-import com.example.beautysalon.model.Service;
 import com.example.beautysalon.service.AppointmentService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 

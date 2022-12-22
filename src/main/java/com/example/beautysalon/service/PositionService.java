@@ -1,11 +1,14 @@
 package com.example.beautysalon.service;
 
+import com.example.beautysalon.dto.EmployeeDTO;
 import com.example.beautysalon.dto.PositionDTO;
 import com.example.beautysalon.mappers.PositionMapper;
+import com.example.beautysalon.model.Employee;
 import com.example.beautysalon.model.Position;
 import com.example.beautysalon.repository.PositionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,5 +26,11 @@ public class PositionService {
     public PositionDTO getById(UUID id) {
         Optional<Position> byId = positionRepository.findById(id);
         return byId.map(positionMapper::positionToPositionDto).orElse(null);
+    }
+
+    public List<PositionDTO> getAllPositions() {
+        List<Position> allPositions = positionRepository.findAll();
+        List<PositionDTO> positions = positionMapper.positionToPositionDto(allPositions);
+        return positions;
     }
 }

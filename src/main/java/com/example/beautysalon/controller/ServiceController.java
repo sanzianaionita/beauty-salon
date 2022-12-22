@@ -1,8 +1,6 @@
 package com.example.beautysalon.controller;
 
-import com.example.beautysalon.dto.SalonDTO;
 import com.example.beautysalon.dto.ServiceDTO;
-import com.example.beautysalon.model.Service;
 import com.example.beautysalon.service.ServiceClassForServices;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/service")

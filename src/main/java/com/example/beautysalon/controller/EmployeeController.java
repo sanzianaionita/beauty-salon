@@ -97,4 +97,28 @@ public class EmployeeController {
         return employeeService.confirmAppointment(appointmentId, confirmed);
     }
 
+    @Operation(summary = "Edit employee details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Employee detaile changed",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad request, adjust before retrying",
+                    content = @Content),
+            @ApiResponse(responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content)
+    })
+    @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
+    @PutMapping("/edit")
+    public ResponseEntity<EmployeeDTO> editDetailsOfEmployee(@RequestParam String firstName,
+                                                             @RequestParam String lastName,
+                                                             @RequestParam UUID employeeId) {
+
+        return ResponseEntity.ok(employeeService.editDetailsOfEmployee(firstName, lastName, employeeId));
+    }
+
 }

@@ -102,7 +102,6 @@ public class AppointmentService {
            }
        });
 
-
         Appointment saveAppointment = appointmentRepository.save(appointmentMapper.appointmentDtoToAppointment(appointmentDTO));
 
         return appointmentMapper.appointmentToAppointmentDto(saveAppointment);

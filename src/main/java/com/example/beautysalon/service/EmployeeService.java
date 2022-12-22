@@ -5,6 +5,7 @@ import com.example.beautysalon.dto.EmployeeDTO;
 import com.example.beautysalon.mappers.AppointmentMapper;
 import com.example.beautysalon.mappers.EmployeeMapper;
 import com.example.beautysalon.model.Appointment;
+import com.example.beautysalon.model.Client;
 import com.example.beautysalon.model.Employee;
 import com.example.beautysalon.model.Position;
 import com.example.beautysalon.repository.AppointmentRepository;
@@ -77,5 +78,34 @@ public class EmployeeService {
 
         return appointmentMapper.appointmentToAppointmentDto(savedAppointment);
 
+    }
+
+    public EmployeeDTO editDetailsOfEmployee(String firstName, String lastName, UUID employeeId) {
+        Optional<Employee> byId = employeeRepository.findById(employeeId);
+
+        if (byId.isEmpty()) {
+            throw new RuntimeException("Employee does not exist");
+        }
+
+        UUID userId = SecurityUtils.getUserId();
+
+        if (userId == null) {
+            throw new RuntimeException("Employee not logged in!");
+        }
+
+        employeeRepository.findByUserId(userId).ifPresent(employee -> {
+            if (!byId.get().getId().equals(employee.getId())) {
+                throw new RuntimeException("Employee details not visible.");
+            }
+        });
+
+        Employee employee = byId.get();
+
+        employee.setFirstName(firstName);
+        employee.setLastName(lastName);
+
+        Employee savedEmployee = employeeRepository.save(byId.get());
+
+        return employeeMapper.employeeToEmployeeDto(savedEmployee);
     }
 }
