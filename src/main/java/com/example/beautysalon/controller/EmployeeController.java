@@ -1,31 +1,100 @@
 package com.example.beautysalon.controller;
 
+import com.example.beautysalon.dto.AppointmentDTO;
 import com.example.beautysalon.dto.EmployeeDTO;
+import com.example.beautysalon.service.AppointmentService;
 import com.example.beautysalon.service.EmployeeService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/employee")
+@Api(tags = "Employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final AppointmentService appointmentService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, AppointmentService appointmentService) {
         this.employeeService = employeeService;
+        this.appointmentService = appointmentService;
     }
 
+    @Operation(summary = "Fetch all employees by function")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "List of all employees by function",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not authorized",
+                    content = @Content),
+    })
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     @GetMapping("/allByFunction")
-    public ResponseEntity<List<EmployeeDTO>> getEmployeesByPosition(@RequestParam String functionName){
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesByPosition(@RequestParam String functionName) {
 
         List<EmployeeDTO> employeesByPosition = employeeService.getEmployeesByPosition(functionName);
 
         return ResponseEntity.ok(employeesByPosition);
+    }
+
+    @Operation(summary = "Fetch all employees")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "List of all employees",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not authorized",
+                    content = @Content),
+    })
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @GetMapping("/all")
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+
+        List<EmployeeDTO> allEmployees = employeeService.getAllEmployees();
+        return ResponseEntity.ok(allEmployees);
+    }
+
+    @Operation(summary = "Fetch all appointments for an employee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "List of all appointments for an employee",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not authorized",
+                    content = @Content),
+    })
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @GetMapping("/appointments")
+    public List<AppointmentDTO> getAllAppointmentsForEmployee(@RequestParam UUID employeeId) {
+
+        return appointmentService.getAllAppointmentsForEmployee(employeeId);
+    }
+
+    @Operation(summary = "Confirm an appointment")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Appointment confirmed/unconfirmed",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not authorized",
+                    content = @Content),
+    })
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PutMapping("/confirm-appointment")
+    public AppointmentDTO confirmAppointment(@RequestParam UUID appointmentId,
+                                             @RequestParam boolean confirmed) {
+
+        return employeeService.confirmAppointment(appointmentId, confirmed);
     }
 
 }

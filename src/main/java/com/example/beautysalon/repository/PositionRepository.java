@@ -12,4 +12,6 @@ public interface PositionRepository extends JpaRepository<Position, UUID> {
 
     List<Position> findAllByFunctionName(String functionName);
 
+
+
 }

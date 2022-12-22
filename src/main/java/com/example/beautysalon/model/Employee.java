@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,9 +34,16 @@ public class Employee {
     @JoinColumn(name = "POSITION_ID")
     private Position position;
 
+    @OneToOne
+    @JoinColumn(name = "USER_ID")
+    private BeautyUser user;
+
     @ManyToOne
     @JoinColumn(name = "SALON_ID")
     private Salon salon;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Appointment> appointment;
 
     public UUID getId() {
         return id;
@@ -91,5 +99,21 @@ public class Employee {
 
     public void setSalon(Salon salon) {
         this.salon = salon;
+    }
+
+    public List<Appointment> getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(List<Appointment> appointment) {
+        this.appointment = appointment;
+    }
+
+    public BeautyUser getUser() {
+        return user;
+    }
+
+    public void setUser(BeautyUser user) {
+        this.user = user;
     }
 }

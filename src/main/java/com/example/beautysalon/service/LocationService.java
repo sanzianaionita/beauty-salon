@@ -1,5 +1,6 @@
 package com.example.beautysalon.service;
 
+import com.example.beautysalon.dto.LocationDTO;
 import com.example.beautysalon.mappers.LocationMapper;
 import com.example.beautysalon.model.Location;
 import com.example.beautysalon.repository.LocationRepository;
@@ -19,8 +20,8 @@ public class LocationService {
         this.locationMapper = locationMapper;
     }
 
-    public Location findById(UUID id) {
+    public LocationDTO findById(UUID id) {
         Optional<Location> byId = locationRepository.findById(id);
-        return byId.orElse(null);
+        return byId.map(locationMapper::locationToLocationDto).orElse(null);
     }
 }

@@ -20,15 +20,6 @@ public class Appointment {
     @Column(name = "APPOINTMENT_DATE")
     private LocalDateTime appointmentDate;
 
-    @Column(name = "CLIENT_FIRST_NAME")
-    private String clientFirstName;
-
-    @Column(name = "CLIENT_LAST_NAME")
-    private String clientLastName;
-
-    @Column(name = "CLIENT_PHONE_NUMBER")
-    private Integer clientPhoneNumber;
-
     @Column(name = "CONFIRMED")
     private Boolean confirmed;
 
@@ -40,9 +31,13 @@ public class Appointment {
     @JoinColumn(name = "SERVICE_ID")
     private Service service;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "EMPLOYEES_ID")
     private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "CLIENT_ID")
+    private Client client;
 
     public UUID getId() {
         return id;
@@ -58,30 +53,6 @@ public class Appointment {
 
     public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
-    }
-
-    public String getClientFirstName() {
-        return clientFirstName;
-    }
-
-    public void setClientFirstName(String clientFirstName) {
-        this.clientFirstName = clientFirstName;
-    }
-
-    public String getClientLastName() {
-        return clientLastName;
-    }
-
-    public void setClientLastName(String clientLastName) {
-        this.clientLastName = clientLastName;
-    }
-
-    public Integer getClientPhoneNumber() {
-        return clientPhoneNumber;
-    }
-
-    public void setClientPhoneNumber(Integer clientPhoneNumber) {
-        this.clientPhoneNumber = clientPhoneNumber;
     }
 
     public Boolean getConfirmed() {
@@ -114,5 +85,13 @@ public class Appointment {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

@@ -1,11 +1,11 @@
 package com.example.beautysalon.dto;
 
-import com.example.beautysalon.model.Appointment;
 import com.example.beautysalon.validator.OnlyLetters;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -14,25 +14,17 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDTO implements Serializable {
+public class ClientDTO implements Serializable {
 
     private UUID id;
 
-    @NotNull
     @OnlyLetters
     private String firstName;
 
-    @NotNull
     @OnlyLetters
     private String lastName;
 
-    private PositionDTO position;
-
-    private String salon;
-
-    @JsonIgnore
-    private UUID salonId;
+    private String phoneNumber;
 
     private List<AppointmentDTO> appointment;
-
 }
