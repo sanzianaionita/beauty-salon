@@ -1,6 +1,5 @@
 package com.example.beautysalon.service;
 
-import com.example.beautysalon.dto.SalonDTO;
 import com.example.beautysalon.dto.ServiceDTO;
 import com.example.beautysalon.mappers.ServiceMapper;
 import com.example.beautysalon.model.Salon;
@@ -9,7 +8,6 @@ import com.example.beautysalon.repository.ServiceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ServiceClassForServices {
@@ -43,7 +41,6 @@ public class ServiceClassForServices {
         serviceDTOList.forEach(service -> {
             servicesByCategory.computeIfAbsent(service.getServiceName(), k -> new ArrayList<>()).add(service);
         });
-
 
         return servicesByCategory;
     }

@@ -25,6 +25,7 @@ public class LocationService {
 
     public LocationDTO findById(UUID id) {
         Optional<Location> byId = locationRepository.findById(id);
+
         return byId.map(locationMapper::locationToLocationDto).orElse(null);
     }
 

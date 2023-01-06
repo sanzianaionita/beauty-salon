@@ -66,8 +66,8 @@ public class AppointmentService {
             appointment.setClientId(clientId);
             appointment.setAppointmentDate(dateTime);
             appointment.setConfirmed(false);
-
-            Appointment savedAppointment = appointmentRepository.save(appointmentMapper.appointmentDtoToAppointment(appointment));
+            Appointment appointmentEntity = appointmentMapper.appointmentDtoToAppointment(appointment);
+            Appointment savedAppointment = appointmentRepository.save(appointmentEntity);
 
             return appointmentMapper.appointmentToAppointmentDto(savedAppointment);
         }
