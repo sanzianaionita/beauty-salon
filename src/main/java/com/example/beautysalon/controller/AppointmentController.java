@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +36,9 @@ public class AppointmentController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/all-from-salon")
-    public List<AppointmentDTO> getAllAppointmentsFromSalon(@RequestParam UUID salonId) {
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointmentsFromSalon(@RequestParam UUID salonId) {
 
-        return appointmentService.getAllAppointmentsFromSalon(salonId);
+        return ResponseEntity.ok(appointmentService.getAllAppointmentsFromSalon(salonId));
     }
 
     @Operation(summary = "Fetch all appointments of a client")
@@ -51,9 +52,9 @@ public class AppointmentController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping("/all-for-client")
-    public List<AppointmentDTO> getAllAppointmentsForClient(@RequestParam UUID clientId) {
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointmentsForClient(@RequestParam UUID clientId) {
 
-        return appointmentService.getAllAppointmentsForClient(clientId);
+        return ResponseEntity.ok(appointmentService.getAllAppointmentsForClient(clientId));
     }
 
     @Operation(summary = "Fetch all appointments for an employee")
@@ -67,9 +68,9 @@ public class AppointmentController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping("/all-for-employee")
-    public List<AppointmentDTO> getAllAppointmentsForEmployee(@RequestParam UUID employeeId) {
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointmentsForEmployee(@RequestParam UUID employeeId) {
 
-        return appointmentService.getAllAppointmentsForEmployee(employeeId);
+        return ResponseEntity.ok(appointmentService.getAllAppointmentsForEmployee(employeeId));
     }
 
     @Operation(summary = "Create an appointment")
@@ -83,13 +84,13 @@ public class AppointmentController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     @PostMapping("")
-    public AppointmentDTO createAppointment(@RequestParam UUID salonId,
+    public ResponseEntity<AppointmentDTO> createAppointment(@RequestParam UUID salonId,
                                             @RequestParam UUID serviceId,
                                             @RequestParam UUID employeeId,
                                             @RequestParam UUID clientId,
                                             @RequestParam String appointmentDate) {
 
-        return appointmentService.createAppointment(salonId, serviceId, employeeId, clientId, appointmentDate);
+        return ResponseEntity.ok(appointmentService.createAppointment(salonId, serviceId, employeeId, clientId, appointmentDate));
 
     }
 
@@ -104,9 +105,9 @@ public class AppointmentController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     @PutMapping("/edit-appointment")
-    public AppointmentDTO editAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+    public ResponseEntity<AppointmentDTO> editAppointment(@RequestBody AppointmentDTO appointmentDTO) {
 
-        return appointmentService.editAppointment(appointmentDTO);
+        return ResponseEntity.ok(appointmentService.editAppointment(appointmentDTO));
     }
 
     @Operation(summary = "Delete an appointment")
@@ -120,8 +121,8 @@ public class AppointmentController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     @DeleteMapping("/delete-appointment")
-    public int deleteAppointment(@RequestParam UUID appointmentId) {
+    public ResponseEntity<Integer> deleteAppointment(@RequestParam UUID appointmentId) {
 
-        return appointmentService.deleteAppointment(appointmentId);
+        return ResponseEntity.ok(appointmentService.deleteAppointment(appointmentId));
     }
 }

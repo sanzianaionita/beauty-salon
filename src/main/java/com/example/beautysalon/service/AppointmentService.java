@@ -1,11 +1,13 @@
 package com.example.beautysalon.service;
 
+import com.example.beautysalon.customExceptions.CustomException;
 import com.example.beautysalon.dto.AppointmentDTO;
 import com.example.beautysalon.mappers.AppointmentMapper;
 import com.example.beautysalon.model.Appointment;
 import com.example.beautysalon.repository.AppointmentRepository;
 import com.example.beautysalon.repository.ClientRepository;
 import com.example.beautysalon.security.util.SecurityUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -43,7 +45,7 @@ public class AppointmentService {
         List<Appointment> allByAppointmentDateBetween = appointmentRepository.findAllByAppointmentDateBetweenAndEmployeeIdAndSalonIdAndClientIdNot(startDate, endDate, employeeId, salonId, clientId);
 
         if (!allByAppointmentDateBetween.isEmpty()) {
-            throw new RuntimeException("Appointment date overlaps");
+            throw new CustomException("Appointment date overlaps", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
 
         List<Appointment> allByClientId = appointmentRepository.findAllByClientId(clientId);
@@ -77,7 +79,7 @@ public class AppointmentService {
         Optional<Appointment> byId = appointmentRepository.findById(appointmentDTO.getId());
 
         if (byId.isEmpty()) {
-            throw new RuntimeException("Appointment does not exist");
+            throw new CustomException("Appointment does not exist", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         }
 
         LocalDateTime startDate = appointmentDTO.getAppointmentDate().minus(59, ChronoUnit.MINUTES);
@@ -86,18 +88,18 @@ public class AppointmentService {
         List<Appointment> allByAppointmentDateBetween = appointmentRepository.findAllByAppointmentDateBetweenAndEmployeeIdAndSalonIdAndClientIdNot(startDate, endDate, appointmentDTO.getEmployeeId(), appointmentDTO.getSalonId(), appointmentDTO.getClientId());
 
         if (!allByAppointmentDateBetween.isEmpty()) {
-            throw new RuntimeException("Appointment date overlaps");
+            throw new CustomException("Appointment date overlaps", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
 
         UUID userId = SecurityUtils.getUserId();
 
         if (userId == null) {
-            throw new RuntimeException("User not logged in!");
+            throw new CustomException("User not logged in!", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value());
         }
 
        clientRepository.findByUserId(userId).ifPresent(client -> {
            if (!byId.get().getClient().getId().equals(client.getId())) {
-               throw new RuntimeException("Appointment is not included in your appointment list!");
+               throw new CustomException("Appointment is not included in your appointment list!", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
            }
        });
 

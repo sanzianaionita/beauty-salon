@@ -1,5 +1,6 @@
 package com.example.beautysalon.service;
 
+import com.example.beautysalon.customExceptions.CustomException;
 import com.example.beautysalon.dto.BeautyUserDTO;
 import com.example.beautysalon.dto.LoggedApplicationUserDTO;
 import com.example.beautysalon.dto.RegisterModelDTO;
@@ -15,6 +16,7 @@ import com.example.beautysalon.security.config.ConfigClass;
 import com.example.beautysalon.security.jwt.JwtTokenUtil;
 import com.example.beautysalon.security.service.SecurityUserService;
 import com.example.beautysalon.security.util.SecurityUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -63,7 +65,7 @@ public class BeautyUserService {
         Optional<BeautyUser> byUserName = userRepository.findByEmail(email);
 
         if (byUserName.isEmpty()) {
-            throw new RuntimeException("User failed");
+            throw new CustomException("User not found", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         }
 
         authenticate(email, password);
@@ -85,7 +87,7 @@ public class BeautyUserService {
         Optional<BeautyUser> existingUser = userRepository.findByEmail(applicationUserDTO.getUser().getEmail());
 
         if (existingUser.isPresent()) {
-            throw new RuntimeException("User already exists!");
+            throw new CustomException("User already exists!", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
 
         BeautyUserDTO userDTO = applicationUserDTO.getUser();
@@ -122,11 +124,11 @@ public class BeautyUserService {
             Optional<BeautyUser> byId = userRepository.findById(userId);
 
             if (byId.isEmpty()) {
-                throw new RuntimeException("User does not exist!");
+                throw new CustomException("User does not exist!", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
             }
             return mapper.userToUserDTO(byId.get());
         } else {
-            throw new RuntimeException("Error!");
+            throw new CustomException("Error!", HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
@@ -138,7 +140,7 @@ public class BeautyUserService {
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new RuntimeException("Bad email or password");
+            throw new CustomException("Bad email or password", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
     }
 }

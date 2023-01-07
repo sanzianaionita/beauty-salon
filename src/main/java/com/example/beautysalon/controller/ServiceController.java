@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,7 @@ public class ServiceController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT', 'EMPLOYEE')")
     @GetMapping("/by-salon")
-    public Map<String, List<ServiceDTO>> getServicesBySalon(@RequestParam String salonName) {
-        return serviceClassForServices.getServicesBySalon(salonName);
+    public ResponseEntity<Map<String, List<ServiceDTO>>> getServicesBySalon(@RequestParam String salonName) {
+        return ResponseEntity.ok(serviceClassForServices.getServicesBySalon(salonName));
     }
 }

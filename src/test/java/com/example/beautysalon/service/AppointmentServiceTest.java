@@ -1,5 +1,6 @@
 package com.example.beautysalon.service;
 
+import com.example.beautysalon.customExceptions.CustomException;
 import com.example.beautysalon.dto.AppointmentDTO;
 import com.example.beautysalon.mappers.AppointmentMapperImpl;
 import com.example.beautysalon.model.Appointment;
@@ -78,14 +79,12 @@ class AppointmentServiceTest {
     void createAppointment_expect_date_overlaps() {
         when(appointmentRepository.findAllByAppointmentDateBetweenAndEmployeeIdAndSalonIdAndClientIdNot(any(), any(), any(), any(), any())).thenReturn(Collections.singletonList(Utils.returnAppointment()));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        CustomException exception = assertThrows(CustomException.class, () -> {
             appointmentService.createAppointment(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "2022-12-23T19:40:00Z");
         });
 
         String expectedMessage = "Appointment date overlaps";
-        String actualMessage = exception.getMessage();
-
-        System.out.println(exception.getMessage());
+        String actualMessage = exception.getErrorMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -113,12 +112,12 @@ class AppointmentServiceTest {
         client.setId(UUID.randomUUID());
         when(clientRepository.findByUserId(any())).thenReturn(Optional.of(client));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        CustomException exception = assertThrows(CustomException.class, () -> {
             appointmentService.createAppointment(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "2022-12-23T19:40:00Z");
         });
 
         String expectedMessage = "Appointment is not included in your appointment list!";
-        String actualMessage = exception.getMessage();
+        String actualMessage = exception.getErrorMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
     }

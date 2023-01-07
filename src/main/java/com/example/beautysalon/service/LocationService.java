@@ -32,7 +32,6 @@ public class LocationService {
     public List<LocationDTO> getAllLocations() {
 
         List<Location> allLocations = locationRepository.findAll();
-        List<LocationDTO> locations = locationMapper.locationToLocationDto(allLocations);
-        return locations;
+        return locationMapper.locationToLocationDto(allLocations);
     }
 }

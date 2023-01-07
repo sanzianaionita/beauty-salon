@@ -1,5 +1,6 @@
 package com.example.beautysalon.service;
 
+import com.example.beautysalon.customExceptions.CustomException;
 import com.example.beautysalon.dto.AppointmentDTO;
 import com.example.beautysalon.dto.EmployeeDTO;
 import com.example.beautysalon.mappers.AppointmentMapper;
@@ -12,6 +13,7 @@ import com.example.beautysalon.repository.AppointmentRepository;
 import com.example.beautysalon.repository.EmployeeRepository;
 import com.example.beautysalon.repository.PositionRepository;
 import com.example.beautysalon.security.util.SecurityUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,19 +58,19 @@ public class EmployeeService {
 
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointmentId);
         if (optionalAppointment.isEmpty()) {
-            throw new RuntimeException("Appointment does not exist!");
+            throw new CustomException("Appointment does not exist!", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         }
 
         Appointment appointment = optionalAppointment.get();
         UUID userId = SecurityUtils.getUserId();
 
         if (userId == null) {
-            throw new RuntimeException("User not logged in!");
+            throw new CustomException("User not logged in!", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value());
         }
 
         employeeRepository.findByUserId(userId).ifPresent(employee -> {
             if (!employee.getId().equals(appointment.getEmployee().getId())) {
-                throw new RuntimeException("Selected appointment is not included in your appointment list");
+                throw new CustomException("Selected appointment is not included in your appointment list", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
             }
         });
 
@@ -84,18 +86,18 @@ public class EmployeeService {
         Optional<Employee> byId = employeeRepository.findById(employeeId);
 
         if (byId.isEmpty()) {
-            throw new RuntimeException("Employee does not exist");
+            throw new CustomException("Employee does not exist", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         }
 
         UUID userId = SecurityUtils.getUserId();
 
         if (userId == null) {
-            throw new RuntimeException("Employee not logged in!");
+            throw new CustomException("Employee not logged in!", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value());
         }
 
         employeeRepository.findByUserId(userId).ifPresent(employee -> {
             if (!byId.get().getId().equals(employee.getId())) {
-                throw new RuntimeException("Employee details not visible.");
+                throw new CustomException("Employee details not visible.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
             }
         });
 

@@ -74,7 +74,6 @@ public class SalonController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT', 'EMPLOYEE')")
     @GetMapping("/by-name")
     public ResponseEntity<SalonDTO> getSalonsBySalonName(@RequestParam String salonName) {
-        System.out.println("test");
         return ResponseEntity.ok(salonService.getSalonsBySalonName(salonName));
     }
 

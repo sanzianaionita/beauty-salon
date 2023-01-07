@@ -75,9 +75,9 @@ public class EmployeeController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping("/appointments")
-    public List<AppointmentDTO> getAllAppointmentsForEmployee(@RequestParam UUID employeeId) {
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointmentsForEmployee(@RequestParam UUID employeeId) {
 
-        return appointmentService.getAllAppointmentsForEmployee(employeeId);
+        return ResponseEntity.ok(appointmentService.getAllAppointmentsForEmployee(employeeId));
     }
 
     @Operation(summary = "Confirm an appointment")
@@ -91,10 +91,10 @@ public class EmployeeController {
     })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping("/confirm-appointment")
-    public AppointmentDTO confirmAppointment(@RequestParam UUID appointmentId,
+    public ResponseEntity<AppointmentDTO> confirmAppointment(@RequestParam UUID appointmentId,
                                              @RequestParam boolean confirmed) {
 
-        return employeeService.confirmAppointment(appointmentId, confirmed);
+        return ResponseEntity.ok(employeeService.confirmAppointment(appointmentId, confirmed));
     }
 
     @Operation(summary = "Edit employee details")
